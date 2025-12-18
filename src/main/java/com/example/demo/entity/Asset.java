@@ -14,7 +14,8 @@ public class Asset {
     
     private String name;
     private String status;
-    private Double purchaseValue;
+   // Change purchaseValue to purchaseCost OR change the service call
+private Double purchaseCost;
     private LocalDate purchaseDate;
     private LocalDateTime createdAt;
 
