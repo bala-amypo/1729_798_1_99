@@ -1,16 +1,32 @@
-@Entity
-public class DepreciationRule {
+package com.example.demo.controller;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+import java.util.List;
 
-    private String ruleName;
-    private String method;
-    private Integer usefulLifeYears;
-    private Double salvageValue;
-    private LocalDateTime createdAt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-    public Integer getUsefulLifeYears() { return usefulLifeYears; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+import com.example.demo.entity.DepreciationRule;
+import com.example.demo.service.DepreciationRuleService;
+
+@RestController
+@RequestMapping("/rules")
+public class DepreciationRuleController {
+
+    @Autowired
+    private DepreciationRuleService ruleService;
+
+    @PostMapping
+    public DepreciationRule create(@RequestBody DepreciationRule rule) {
+        return ruleService.save(rule);
+    }
+
+    @GetMapping
+    public List<DepreciationRule> getAll() {
+        return ruleService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public DepreciationRule getById(@PathVariable Long id) {
+        return ruleService.getById(id);
+    }
 }
