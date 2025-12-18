@@ -1,7 +1,8 @@
 package com.example.demo.repository;
+import com.example.demo.entity.AssetDisposal;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.demo.entity.Asset;
+import java.util.List;
 
 public interface AssetDisposalRepository extends JpaRepository<Asset, Long> {
 }

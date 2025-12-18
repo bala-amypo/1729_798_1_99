@@ -1,3 +1,9 @@
+package com.example.demo.entity;
+import jakarta.persistence.*; // For @Entity, @Id, @GeneratedValue, @Column, etc.
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+
 @Entity
 public class AssetDisposal {
 
