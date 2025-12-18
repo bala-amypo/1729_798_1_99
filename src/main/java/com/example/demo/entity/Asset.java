@@ -6,15 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Data // This generates getPurchaseCost, setStatus, setVendor, etc.
+@Data
 public class Asset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(unique = true)
     private String assetTag;
-    
     private String assetName;
     private LocalDate purchaseDate;
     private Double purchaseCost;
