@@ -1,11 +1,8 @@
 package com.example.demo.service;
 
-import java.util.List;
-import com.example.demo.entity.Vendor;
+import com.example.demo.entity.DepreciationRule;
 
-public interface VendorService {
+public interface DepreciationRuleService {
 
-    Vendor createVendor(Vendor vendor);
-
-    List<Vendor> getAllVendors();
+    DepreciationRule createRule(DepreciationRule rule);
 }
