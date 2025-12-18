@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AssetDisposalController{
     @Autowired
-    AssetDisposalService assetDisposalService;
+AssetDisposalService assetDisposalService;
 
     @PostMapping("/api/disposals")
-    public AssetDisposal postAsset(@RequestBody AssetDisposal as){
-        return assetDisposalService.requestDisposal()
+public AssetDisposal postAsset(@RequestBody AssetDisposal as){
+        return assetDisposalService.requestDisposal();
     }
 }
