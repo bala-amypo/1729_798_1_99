@@ -28,9 +28,9 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
     @Override
     public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
 
-        Asset asset = assetRepo.findById(assetId).orElseThrow();
-        disposal.setAsset(asset);
-        disposal.setCreatedAt(LocalDateTime.now());
+Asset asset = assetRepo.findById(assetId).orElseThrow();
+disposal.setAsset(asset);
+disposal.setCreatedAt(LocalDateTime.now());
 
         return disposalRepo.save(disposal);
     }
@@ -38,15 +38,15 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
     @Override
     public AssetDisposal approveDisposal(Long disposalId, Long adminId) {
 
-        AssetDisposal disposal = disposalRepo.findById(disposalId).orElseThrow();
-        User admin = userRepo.findById(adminId).orElseThrow();
+AssetDisposal disposal = disposalRepo.findById(disposalId).orElseThrow();
+User admin = userRepo.findById(adminId).orElseThrow();
 
-        disposal.setApprovedBy(admin);
+disposal.setApprovedBy(admin);
 
-        Asset asset = disposal.getAsset();
-        asset.setStatus("DISPOSED");
+Asset asset = disposal.getAsset();
+asset.setStatus("DISPOSED");
         assetRepo.save(asset);
 
-        return disposalRepo.save(disposal);
+return disposalRepo.save(disposal);
     }
 }
