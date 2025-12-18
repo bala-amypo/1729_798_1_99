@@ -1,23 +1,26 @@
-package com.example.demo.entity;
-import java.time.*;
-import jakarta.persistence.*;
-
-
 @Entity
 public class AssetDisposal {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    private Asset asset;
+
+    private String disposalMethod;
+    private Double disposalValue;
+    private LocalDate disposalDate;
+
+    @ManyToOne
+    private User approvedBy;
+
+    private LocalDateTime createdAt;
 
 
-@OneToOne
-private Asset asset;
-private String disposalMethod;
-private Double disposalValue;
-private LocalDate disposalDate;
+    public void setAsset(Asset asset) { this.asset = asset; }
+    public Asset getAsset() { return asset; }
 
-
-@ManyToOne
-private User approvedBy;
-private LocalDateTime createdAt;
+    public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
