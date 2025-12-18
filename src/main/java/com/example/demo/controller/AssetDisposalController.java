@@ -21,5 +21,7 @@ public class AssetDisposalController{
     AssetDisposalService assetDisposalService;
 
     @PostMapping("/api/disposals")
-    public AssetDisposal 
+    public AssetDisposal postAsset(@RequestBody AssetDisposal as){
+        return assetDisposalService.requestDisposal()
+    }
 }
