@@ -7,16 +7,12 @@ import jakarta.persistence.Id;
 
 @Entity
 
-
-
-
-
 public class User {
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String email;
+    private unique String email;
     private LocalDateTime createdAt;
     public Long getId() {
         return id;
@@ -49,8 +45,5 @@ public class User {
         this.name = name;
         this.email = email;
         this.createdAt = createdAt;
-    }
-
-    
-    
+    } 
 }
