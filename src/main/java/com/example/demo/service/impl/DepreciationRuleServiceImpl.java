@@ -1,28 +1,25 @@
 package com.example.demo.service.impl;
 
-import java.time.LocalDateTime;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.DepreciationRule;
 import com.example.demo.repository.DepreciationRuleRepository;
 import com.example.demo.service.DepreciationRuleService;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class DepreciationRuleServiceImpl implements DepreciationRuleService {
 
-    @Autowired
-    private DepreciationRuleRepository ruleRepo;
+    private final DepreciationRuleRepository repo;
 
-    @Override
+    public DepreciationRuleServiceImpl(DepreciationRuleRepository repo) {
+        this.repo = repo;
+    }
+
     public DepreciationRule createRule(DepreciationRule rule) {
+        return repo.save(rule);
+    }
 
-        if (rule.getUsefulLifeYears() <= 0) {
-            throw new RuntimeException("Useful life must be > 0");
-        }
-
-        rule.setCreatedAt(LocalDateTime.now());
-        return ruleRepo.save(rule);
+    public List<DepreciationRule> getAllRules() {
+        return repo.findAll();
     }
 }
