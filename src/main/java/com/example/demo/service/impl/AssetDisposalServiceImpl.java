@@ -1,52 +1,38 @@
 package com.example.demo.service.impl;
 
-import java.time.LocalDateTime;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.Asset;
-import com.example.demo.entity.AssetDisposal;
-import com.example.demo.entity.User;
-import com.example.demo.repository.AssetDisposalRepository;
-import com.example.demo.repository.AssetRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.AssetDisposalService;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AssetDisposalServiceImpl implements AssetDisposalService {
 
-    @Autowired
-    private AssetRepository assetRepo;
+    private final AssetRepository assetRepo;
+    private final AssetDisposalRepository disposalRepo;
+    private final UserRepository userRepo;
 
-    @Autowired
-    private AssetDisposalRepository disposalRepo;
+    public AssetDisposalServiceImpl(AssetRepository assetRepo,
+                                    AssetDisposalRepository disposalRepo,
+                                    UserRepository userRepo) {
+        this.assetRepo = assetRepo;
+        this.disposalRepo = disposalRepo;
+        this.userRepo = userRepo;
+    }
 
-    @Autowired
-    private UserRepository userRepo;
-
-    @Override
     public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
-
-Asset asset = assetRepo.findById(assetId).orElseThrow();
-disposal.setAsset(asset);
-disposal.setCreatedAt(LocalDateTime.now());
-
+        disposal.setAsset(assetRepo.findById(assetId).orElseThrow());
         return disposalRepo.save(disposal);
     }
 
-    @Override
     public AssetDisposal approveDisposal(Long disposalId, Long adminId) {
+        AssetDisposal disposal = disposalRepo.findById(disposalId).orElseThrow();
+        disposal.setApprovedBy(userRepo.findById(adminId).orElseThrow());
 
-AssetDisposal disposal = disposalRepo.findById(disposalId).orElseThrow();
-User admin = userRepo.findById(adminId).orElseThrow();
-
-disposal.setApprovedBy(admin);
-
-Asset asset = disposal.getAsset();
-asset.setStatus("DISPOSED");
+        Asset asset = disposal.getAsset();
+        asset.setStatus("DISPOSED");
         assetRepo.save(asset);
 
-return disposalRepo.save(disposal);
+        return disposalRepo.save(disposal);
     }
 }
