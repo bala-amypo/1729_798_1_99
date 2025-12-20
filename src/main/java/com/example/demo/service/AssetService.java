@@ -8,6 +8,4 @@ public interface AssetService {
     List<Asset> getAllAssets();
     List<Asset> getAssetsByStatus(String status);
     Asset getAsset(Long id);
-    // Needed to fix controller error
-    Asset saveAsset(Asset asset); 
 }
