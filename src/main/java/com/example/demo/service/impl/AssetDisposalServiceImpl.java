@@ -1,10 +1,15 @@
 package com.example.demo.service.impl;
-import com.example.demo.exception.ResourceNotFoundException;
 
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
+import com.example.demo.entity.Asset;
+import com.example.demo.entity.AssetDisposal;
+import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.AssetDisposalRepository;
+import com.example.demo.repository.AssetRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AssetDisposalService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AssetDisposalServiceImpl implements AssetDisposalService {
@@ -21,17 +26,33 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         this.userRepo = userRepo;
     }
 
+    @Override
     public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
-        disposal.setAsset(assetRepo.findById(assetId).orElseThrow(() -> new ResourceNotFoundException("Event not found")));
+
+        Asset asset = assetRepo.findById(assetId)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+
+        disposal.setAsset(asset);
         return disposalRepo.save(disposal);
     }
 
+    @Override
+    @Transactional
     public AssetDisposal approveDisposal(Long disposalId, Long adminId) {
-        AssetDisposal disposal = disposalRepo.findById(disposalId).orElseThrow(() -> new ResourceNotFoundException("Event not found"));
-        disposal.setApprovedBy(userRepo.findById(adminId).orElseThrow(() -> new ResourceNotFoundException("Event not found")));
 
+        AssetDisposal disposal = disposalRepo.findById(disposalId)
+                .orElseThrow(() -> new ResourceNotFoundException("Disposal not found"));
+
+        User admin = userRepo.findById(adminId)
+                .orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
+
+        disposal.setApprovedBy(admin);
 
         Asset asset = disposal.getAsset();
+        if (asset == null) {
+            throw new ResourceNotFoundException("Asset not linked to disposal");
+        }
+
         asset.setStatus("DISPOSED");
         assetRepo.save(asset);
 
