@@ -15,10 +15,10 @@ public class Role {
 
     public Role() {}
 
-    public Role(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    // public Role(Long id, String name) {
+    //     this.id = id;
+    //     this.name = name;
+    // }
 
     // Getters & Setters
     public Long getId() {
@@ -36,5 +36,10 @@ public class Role {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Role(String name) {
+    this.name = name;
+}
+
 }
 

@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface AssetRepository extends JpaRepository<Asset, Long> {
     List<Asset> findByStatus(String status);
+    List<Asset> findByVendor(Vendor vendor);
+boolean existsByAssetTag(String assetTag);
+
 }
