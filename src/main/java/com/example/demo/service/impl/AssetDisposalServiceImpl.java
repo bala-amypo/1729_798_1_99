@@ -18,9 +18,10 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
     private final AssetDisposalRepository disposalRepo;
     private final UserRepository userRepo;
 
-    public AssetDisposalServiceImpl(AssetRepository assetRepo,
-                                    AssetDisposalRepository disposalRepo,
-                                    UserRepository userRepo) {
+    public AssetDisposalServiceImpl(
+            AssetRepository assetRepo,
+            AssetDisposalRepository disposalRepo,
+            UserRepository userRepo) {
         this.assetRepo = assetRepo;
         this.disposalRepo = disposalRepo;
         this.userRepo = userRepo;
@@ -32,7 +33,14 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         Asset asset = assetRepo.findById(assetId)
                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
 
+        if ("DISPOSED".equals(asset.getStatus())) {
+            throw new IllegalStateException("Asset already disposed");
+        }
+
+        // IMPORTANT FIX
+        disposal.setId(null);
         disposal.setAsset(asset);
+
         return disposalRepo.save(disposal);
     }
 
