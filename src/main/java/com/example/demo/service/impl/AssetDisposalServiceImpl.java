@@ -21,13 +21,13 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
     }
 
     public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
-        disposal.setAsset(assetRepo.findById(assetId).orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+        disposal.setAsset(assetRepo.findById(assetId).orElseThrow(() -> new ResourceNotFoundException("Event not found")));
         return disposalRepo.save(disposal);
     }
 
     public AssetDisposal approveDisposal(Long disposalId, Long adminId) {
         AssetDisposal disposal = disposalRepo.findById(disposalId).orElseThrow(() -> new ResourceNotFoundException("Event not found"));
-        disposal.setApprovedBy(userRepo.findById(adminId).orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+        disposal.setApprovedBy(userRepo.findById(adminId).orElseThrow(() -> new ResourceNotFoundException("Event not found")));
 
 
         Asset asset = disposal.getAsset();
