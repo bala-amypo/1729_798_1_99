@@ -11,6 +11,7 @@ import com.example.demo.service.AssetService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AssetServiceImpl implements AssetService {
@@ -37,11 +38,22 @@ public class AssetServiceImpl implements AssetService {
         DepreciationRule rule = ruleRepo.findById(ruleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Depreciation rule not found"));
 
-        asset.setId(null); // prevent Hibernate thinking it’s an update
+        asset.setId(null);
         asset.setVendor(vendor);
         asset.setDepreciationRule(rule);
         asset.setCreatedAt(LocalDateTime.now());
 
         return assetRepo.save(asset);
+    }
+
+    @Override
+    public List<Asset> getAllAssets() {
+        return assetRepo.findAll();
+    }
+
+    @Override
+    public Asset getAssetById(Long assetId) {
+        return assetRepo.findById(assetId)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
     }
 }
