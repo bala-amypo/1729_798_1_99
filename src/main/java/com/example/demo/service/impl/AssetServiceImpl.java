@@ -41,6 +41,6 @@ public class AssetServiceImpl implements AssetService {
     }
 
     public Asset getAsset(Long id) {
-        return assetRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event not found"));;
+        return assetRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event not found"));
     }
 }

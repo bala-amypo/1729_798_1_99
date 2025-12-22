@@ -20,7 +20,7 @@ public class AssetLifecycleEventServiceImpl
     }
 
     public AssetLifecycleEvent logEvent(Long assetId, AssetLifecycleEvent event) {
-        event.setAsset(assetRepo.findById(assetId).orElseThrow(() -> new ResourceNotFoundException("Event not found")););
+        event.setAsset(assetRepo.findById(assetId).orElseThrow(() -> new ResourceNotFoundException("Event not found")));
         return eventRepo.save(event);
     }
 
