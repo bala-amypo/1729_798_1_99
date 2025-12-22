@@ -25,8 +25,8 @@ public class AssetServiceImpl implements AssetService {
         if (asset.getPurchaseCost() <= 0)
             throw new RuntimeException("Invalid purchase cost");
 
-        asset.setVendor(vendorRepo.findById(vendorId).orElseThrow());
-        asset.setDepreciationRule(ruleRepo.findById(ruleId).orElseThrow());
+        asset.setVendor(vendorRepo.findById(vendorId).orElseThrow(() -> new ResourceNotFoundException("Event not found")););
+        asset.setDepreciationRule(ruleRepo.findById(ruleId).orElseThrow(() -> new ResourceNotFoundException("Event not found")););
         asset.setStatus("ACTIVE");
 
         return assetRepo.save(asset);
@@ -41,6 +41,6 @@ public class AssetServiceImpl implements AssetService {
     }
 
     public Asset getAsset(Long id) {
-        return assetRepo.findById(id).orElseThrow();
+        return assetRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event not found"));;
     }
 }
