@@ -18,7 +18,7 @@ public class AssetDisposal {
                             private Double disposalValue;
                                 private LocalDate disposalDate;
 
-                                    @ManyToOne(optional = true)
+                                    @ManyToOne
                                         private User approvedBy;
 
                                             private LocalDateTime createdAt;
