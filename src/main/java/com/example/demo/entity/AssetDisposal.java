@@ -6,15 +6,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "asset_disposals")
 public class AssetDisposal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // --- JOIN COLUMN DEFINED HERE ---
     @OneToOne
-    @JoinColumn(name = "asset_id", unique = true)
-    @JsonIgnoreProperties({"disposal", "hibernateLazyInitializer", "handler"}) 
+    @JoinColumn(name = "asset_id", referencedColumnName = "id", unique = true)
+    @JsonIgnoreProperties({"disposal", "events", "hibernateLazyInitializer", "handler"}) 
     private Asset asset;
 
     private String disposalMethod;
@@ -22,16 +24,15 @@ public class AssetDisposal {
     private LocalDate disposalDate;
 
     @ManyToOne
-    @JsonIgnoreProperties({"disposals", "hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"password", "hibernateLazyInitializer", "handler"})
     private User approvedBy;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    public AssetDisposal() {
-        this.createdAt = LocalDateTime.now();
-    }
+    public AssetDisposal() {}
 
-    // Getters and Setters (Keep your existing ones)
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Asset getAsset() { return asset; }
@@ -44,6 +45,4 @@ public class AssetDisposal {
     public void setDisposalDate(LocalDate disposalDate) { this.disposalDate = disposalDate; }
     public User getApprovedBy() { return approvedBy; }
     public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
