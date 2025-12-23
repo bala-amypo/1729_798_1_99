@@ -47,7 +47,6 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
 
         disposal.setId(null);
         disposal.setAsset(asset);
-        disposal.setRequestDate(LocalDate.now());
         disposal.setApprovedBy(null);
 
         return disposalRepo.save(disposal);
@@ -67,7 +66,7 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         assetRepo.save(asset);
 
         disposal.setApprovedBy(admin);
-        disposal.setApprovalDate(LocalDate.now());
+
 
         return disposalRepo.save(disposal);
     }
