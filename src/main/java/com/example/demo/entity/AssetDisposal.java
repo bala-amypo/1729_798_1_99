@@ -13,9 +13,11 @@ public class AssetDisposal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // --- JOIN COLUMN DEFINED HERE ---
+    // RELATION: Many-to-One or One-to-One
+    // We use @OneToOne because an asset is disposed of only once.
+    // The "JoinColumn" connects this table to the "assets" table.
     @OneToOne
-    @JoinColumn(name = "asset_id", referencedColumnName = "id", unique = true)
+    @JoinColumn(name = "asset_id", referencedColumnName = "id", nullable = false, unique = true)
     @JsonIgnoreProperties({"disposal", "events", "hibernateLazyInitializer", "handler"}) 
     private Asset asset;
 
@@ -23,16 +25,16 @@ public class AssetDisposal {
     private Double disposalValue;
     private LocalDate disposalDate;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"password", "hibernateLazyInitializer", "handler"})
+    // RELATION: Many disposals can be approved by one Admin User.
+    // No Cascade here; deleting a record shouldn't delete the User.
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "approved_by_id", nullable = false)
+    @JsonIgnoreProperties({"password", "roles"})
     private User approvedBy;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public AssetDisposal() {}
-
-    // Getters and Setters
+    // Getters and Setters...
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Asset getAsset() { return asset; }
