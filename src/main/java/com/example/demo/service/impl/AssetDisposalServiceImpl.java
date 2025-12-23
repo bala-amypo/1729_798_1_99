@@ -18,27 +18,24 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
     private final AssetDisposalRepository disposalRepo;
     private final UserRepository userRepo;
 
-    public AssetDisposalServiceImpl(
-            AssetRepository assetRepo,
-            AssetDisposalRepository disposalRepo,
-            UserRepository userRepo) {
+    public AssetDisposalServiceImpl(AssetRepository assetRepo, AssetDisposalRepository disposalRepo, UserRepository userRepo) {
         this.assetRepo = assetRepo;
         this.disposalRepo = disposalRepo;
         this.userRepo = userRepo;
     }
 
     @Override
+    @Transactional
     public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
-
         Asset asset = assetRepo.findById(assetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + assetId));
 
         if ("DISPOSED".equals(asset.getStatus())) {
-            throw new IllegalStateException("Asset already disposed");
+            throw new IllegalStateException("Asset is already marked as DISPOSED");
         }
 
-        // IMPORTANT FIX
-        disposal.setId(null);
+        // Logic to prevent duplicate records for the same asset
+        disposal.setId(null); 
         disposal.setAsset(asset);
 
         return disposalRepo.save(disposal);
@@ -47,23 +44,17 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
     @Override
     @Transactional
     public AssetDisposal approveDisposal(Long disposalId, Long adminId) {
-
         AssetDisposal disposal = disposalRepo.findById(disposalId)
-                .orElseThrow(() -> new ResourceNotFoundException("Disposal not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Disposal record not found"));
 
         User admin = userRepo.findById(adminId)
-                .orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
-
-        disposal.setApprovedBy(admin);
+                .orElseThrow(() -> new ResourceNotFoundException("Admin user not found"));
 
         Asset asset = disposal.getAsset();
-        if (asset == null) {
-            throw new ResourceNotFoundException("Asset not linked to disposal");
-        }
-
         asset.setStatus("DISPOSED");
         assetRepo.save(asset);
 
+        disposal.setApprovedBy(admin);
         return disposalRepo.save(disposal);
     }
 }
