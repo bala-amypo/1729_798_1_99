@@ -36,7 +36,7 @@ public class Asset {
 
     @OneToMany(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("asset")
-    private List<AssetLifecycle> events;
+    private List<AssetLifecycleEvent> events;
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -49,6 +49,6 @@ public class Asset {
     public void setStatus(String status) { this.status = status; }
     public AssetDisposal getDisposal() { return disposal; }
     public void setDisposal(AssetDisposal disposal) { this.disposal = disposal; }
-    public List<AssetLifecycle> getEvents() { return events; }
-    public void setEvents(List<AssetLifecycle> events) { this.events = events; }
+    public List<AssetLifecycleEvent> getEvents() { return events; }
+    public void setEvents(List<AssetLifecycleEvent> events) { this.events = events; }
 }
