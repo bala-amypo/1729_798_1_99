@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import com.example.demo.entity.AssetDisposal;
 import com.example.demo.entity.User;
-
 import java.util.List;
 
 public interface AssetDisposalService {
@@ -19,6 +18,8 @@ public interface AssetDisposalService {
 
     void deleteDisposal(Long id);
 
-    // The missing method causing the error
+    // Missing abstract methods causing compilation errors
     AssetDisposal approveDisposal(Long disposalId, Long userId);
+
+    AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal);
 }

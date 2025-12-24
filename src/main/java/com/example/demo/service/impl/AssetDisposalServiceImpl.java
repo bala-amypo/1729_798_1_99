@@ -4,6 +4,8 @@ import com.example.demo.entity.AssetDisposal;
 import com.example.demo.entity.User;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AssetDisposalRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.AssetRepository;
 import com.example.demo.service.AssetDisposalService;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,15 @@ import java.util.List;
 public class AssetDisposalServiceImpl implements AssetDisposalService {
 
     private final AssetDisposalRepository disposalRepo;
+    private final UserRepository userRepo;
+    private final AssetRepository assetRepo;
 
-    public AssetDisposalServiceImpl(AssetDisposalRepository disposalRepo) {
+    public AssetDisposalServiceImpl(AssetDisposalRepository disposalRepo,
+                                    UserRepository userRepo,
+                                    AssetRepository assetRepo) {
         this.disposalRepo = disposalRepo;
+        this.userRepo = userRepo;
+        this.assetRepo = assetRepo;
     }
 
     @Override
@@ -63,5 +71,16 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "AssetDisposal not found with id " + id));
         disposalRepo.delete(existing);
+    }
+
+    // Stub methods to satisfy interface, can implement later
+    @Override
+    public AssetDisposal approveDisposal(Long disposalId, Long userId) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }
