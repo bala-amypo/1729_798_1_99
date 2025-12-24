@@ -1,7 +1,13 @@
 package com.example.demo.config;
 
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
+import com.example.demo.entity.Role;
+import com.example.demo.entity.User;
+import com.example.demo.entity.Vendor;
+import com.example.demo.entity.DepreciationRule;
+import com.example.demo.repository.RoleRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.VendorRepository;
+import com.example.demo.repository.DepreciationRuleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
