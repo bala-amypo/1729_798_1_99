@@ -1,13 +1,15 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.AssetDisposal;
+import com.example.demo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
+@Repository
 public interface AssetDisposalRepository extends JpaRepository<AssetDisposal, Long> {
 
-    Optional<AssetDisposal> findByAssetId(Long assetId);
+    // Required for FullIntegrationTest
+    List<AssetDisposal> findByApprovedBy(User user);
 }
-
-
