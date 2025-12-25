@@ -1,9 +1,9 @@
-package com.example.demo.service;
+package com.example.demo.util;
 
-import com.example.demo.entity.Vendor;
-import java.util.List;
+import java.time.LocalDate;
 
-public interface VendorService {
-    Vendor createVendor(Vendor vendor);
-    List<Vendor> getAllVendors();
+public class DateUtil {
+    public static boolean isFutureDate(LocalDate date) {
+        return date.isAfter(LocalDate.now());
+    }
 }
