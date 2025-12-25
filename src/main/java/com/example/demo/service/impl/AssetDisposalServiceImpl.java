@@ -1,58 +1,46 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
-import com.example.demo.entity.Asset;
 import com.example.demo.entity.AssetDisposal;
-import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AssetDisposalRepository;
 import com.example.demo.repository.AssetRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.AssetDisposalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 public class AssetDisposalServiceImpl implements AssetDisposalService {
 
-    @Autowired
-    private AssetDisposalRepository disposalRepository;
+    private final AssetDisposalRepository disposalRepository;
+    private final AssetRepository assetRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private AssetRepository assetRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public AssetDisposalServiceImpl(AssetDisposalRepository disposalRepository, 
+                                   AssetRepository assetRepository, UserRepository userRepository) {
+        this.disposalRepository = disposalRepository;
+        this.assetRepository = assetRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public AssetDisposal requestDisposal(Long assetId) {
-        Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
-
-        AssetDisposal disposal = new AssetDisposal();
+    public AssetDisposal requestDisposal(Long assetId, AssetDisposal disposal) {
+        var asset = assetRepository.findById(assetId)
+            .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+        
         disposal.setAsset(asset);
-        disposal.setStatus("REQUESTED");
-        disposal.setRequestedAt(LocalDateTime.now());
-
         return disposalRepository.save(disposal);
     }
 
     @Override
     public AssetDisposal approveDisposal(Long disposalId, Long adminId) {
-        AssetDisposal disposal = disposalRepository.findById(disposalId)
-                .orElseThrow(() -> new RuntimeException("Disposal not found"));
-
-        User admin = userRepository.findById(adminId)
-                .orElseThrow(() -> new RuntimeException("Admin not found"));
-
+        var disposal = disposalRepository.findById(disposalId)
+            .orElseThrow(() -> new ResourceNotFoundException("Disposal not found"));
+        var admin = userRepository.findById(adminId)
+            .orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
+        
         disposal.setApprovedBy(admin);
-        disposal.setApprovedAt(LocalDateTime.now());
-        disposal.setStatus("APPROVED");
-
-        Asset asset = disposal.getAsset();
-        asset.setStatus("DISPOSED");
-        assetRepository.save(asset);
-
+        disposal.getAsset().setStatus("DISPOSED");
+        assetRepository.save(disposal.getAsset());
+        
         return disposalRepository.save(disposal);
     }
 }
