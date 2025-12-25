@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Asset;
 import com.example.demo.service.AssetService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,30 +11,19 @@ import java.util.List;
 @RequestMapping("/api/assets")
 public class AssetController {
 
-    private final AssetService service;
+    @Autowired
+    private AssetService assetService;
 
-    public AssetController(AssetService service) {
-        this.service = service;
-    }
-
-    // CREATE
     @PostMapping("/{vendorId}/{ruleId}")
     public Asset createAsset(
             @PathVariable Long vendorId,
             @PathVariable Long ruleId,
             @RequestBody Asset asset) {
-        return service.createAsset(vendorId, ruleId, asset);
+        return assetService.createAsset(vendorId, ruleId, asset);
     }
 
-    // GET ALL
     @GetMapping
     public List<Asset> getAllAssets() {
-        return service.getAllAssets();
-    }
-
-    // GET BY ID
-    @GetMapping("/{assetId}")
-    public Asset getAssetById(@PathVariable Long assetId) {
-        return service.getAssetById(assetId);
+        return assetService.getAllAssets();
     }
 }
