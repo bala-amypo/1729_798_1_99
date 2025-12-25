@@ -26,7 +26,7 @@ public class AssetDisposal {
     private Asset asset;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "approved_by")
+    @JoinColumn(name = "approved_by_user_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password", "roles"})
     private User approvedBy;
 
