@@ -47,4 +47,15 @@ public class AssetServiceImpl implements AssetService {
     public List<Asset> getAllAssets() {
         return assetRepository.findAll();
     }
+
+    @Override
+    public Asset getAssetById(Long assetId) {
+        return assetRepository.findById(assetId)
+                .orElseThrow(() -> new RuntimeException("Asset not found"));
+    }
+
+    @Override
+    public List<Asset> getAssetsByStatus(String status) {
+        return assetRepository.findByStatus(status);
+    }
 }

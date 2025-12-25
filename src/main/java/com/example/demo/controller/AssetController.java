@@ -14,7 +14,7 @@ public class AssetController {
     @Autowired
     private AssetService assetService;
 
-  
+
     @PostMapping("/{vendorId}/{ruleId}")
     public Asset createAsset(
             @PathVariable Long vendorId,
@@ -23,19 +23,18 @@ public class AssetController {
         return assetService.createAsset(vendorId, ruleId, asset);
     }
 
-   
+  
     @GetMapping
     public List<Asset> getAllAssets() {
         return assetService.getAllAssets();
     }
-
 
     @GetMapping("/{assetId}")
     public Asset getAssetById(@PathVariable Long assetId) {
         return assetService.getAssetById(assetId);
     }
 
-    
+
     @GetMapping("/status/{status}")
     public List<Asset> getAssetsByStatus(@PathVariable String status) {
         return assetService.getAssetsByStatus(status);
