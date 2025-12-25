@@ -14,7 +14,7 @@ public class AssetLifecycleEvent {
 
     private String eventDescription;
 
-    private LocalDateTime eventDate = LocalDateTime.now();
+    private LocalDateTime eventDate;  // IMPORTANT: LocalDateTime
 
     @ManyToOne
     private Asset asset;
