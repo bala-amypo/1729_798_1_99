@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -21,10 +22,12 @@ public class AssetDisposal {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "vendor", "depreciationRule"})
     private Asset asset;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approved_by", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password", "roles"})
     private User approvedBy;
 
     public Long getId() { return id; }
