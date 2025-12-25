@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,7 +32,7 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
 
-                // PUBLIC ENDPOINTS
+                // PUBLIC
                 .requestMatchers(
                         "/auth/**",
                         "/swagger-ui/**",
@@ -41,18 +42,17 @@ public class SecurityConfig {
 
                 // ADMIN ONLY
                 .requestMatchers(
-                        "/depreciation-rules/**",
-                        "/vendors/**",
-                        "/asset-disposals/**"
+                        "/api/depreciation-rules/**",
+                        "/api/vendors/**",
+                        "/api/asset-disposals/**"
                 ).hasRole("ADMIN")
 
                 // USER + ADMIN
                 .requestMatchers(
-                        "/assets/**",
-                        "/asset-events/**"
+                        "/api/assets/**",
+                        "/api/asset-events/**"
                 ).hasAnyRole("USER", "ADMIN")
 
-                // EVERYTHING ELSE
                 .anyRequest().authenticated()
             )
 
@@ -64,12 +64,10 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // for H2 console
             .headers(headers ->
                 headers.frameOptions(frame -> frame.disable())
             )
 
-            // JWT FILTER
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
