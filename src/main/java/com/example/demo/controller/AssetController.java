@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Asset;
 import com.example.demo.service.AssetService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.repository.AssetRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,32 +11,38 @@ import java.util.List;
 @RequestMapping("/api/assets")
 public class AssetController {
 
-    @Autowired
-    private AssetService assetService;
+    private final AssetService service;
+    private final AssetRepository assetRepository;
 
+    public AssetController(AssetService service, AssetRepository assetRepository) {
+        this.service = service;
+        this.assetRepository = assetRepository;
+    }
 
+    // CREATE
     @PostMapping("/{vendorId}/{ruleId}")
     public Asset createAsset(
             @PathVariable Long vendorId,
             @PathVariable Long ruleId,
             @RequestBody Asset asset) {
-        return assetService.createAsset(vendorId, ruleId, asset);
+        return service.createAsset(vendorId, ruleId, asset);
     }
 
-  
+    // GET ALL
     @GetMapping
     public List<Asset> getAllAssets() {
-        return assetService.getAllAssets();
+        return service.getAllAssets();
     }
 
+    // GET BY ID
     @GetMapping("/{assetId}")
     public Asset getAssetById(@PathVariable Long assetId) {
-        return assetService.getAssetById(assetId);
+        return service.getAssetById(assetId);
     }
 
-
+    // GET BY STATUS
     @GetMapping("/status/{status}")
     public List<Asset> getAssetsByStatus(@PathVariable String status) {
-        return assetService.getAssetsByStatus(status);
+        return assetRepository.findByStatus(status);
     }
 }

@@ -26,4 +26,3 @@ public class AssetLifecycleEventController {
         return service.getEventsForAsset(assetId);
     }
 }
-

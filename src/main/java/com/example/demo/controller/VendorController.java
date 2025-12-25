@@ -2,25 +2,26 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Vendor;
 import com.example.demo.service.VendorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/vendors")
 public class VendorController {
 
-    @Autowired
-    private VendorService vendorService;
+    private final VendorService service;
+
+    public VendorController(VendorService service) {
+        this.service = service;
+    }
 
     @PostMapping
-    public Vendor createVendor(@RequestBody Vendor vendor) {
-        return vendorService.createVendor(vendor);
+    public Vendor create(@RequestBody Vendor vendor) {
+        return service.createVendor(vendor);
     }
 
     @GetMapping
-    public List<Vendor> getAllVendors() {
-        return vendorService.getAllVendors();
+    public List<Vendor> all() {
+        return service.getAllVendors();
     }
 }

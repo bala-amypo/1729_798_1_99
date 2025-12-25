@@ -2,25 +2,26 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DepreciationRule;
 import com.example.demo.service.DepreciationRuleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/depreciation-rules")
+@RequestMapping("/api/rules")
 public class DepreciationRuleController {
 
-    @Autowired
-    private DepreciationRuleService ruleService;
+    private final DepreciationRuleService service;
+
+    public DepreciationRuleController(DepreciationRuleService service) {
+        this.service = service;
+    }
 
     @PostMapping
-    public DepreciationRule createRule(@RequestBody DepreciationRule rule) {
-        return ruleService.createRule(rule);
+    public DepreciationRule create(@RequestBody DepreciationRule rule) {
+        return service.createRule(rule);
     }
 
     @GetMapping
-    public List<DepreciationRule> getAllRules() {
-        return ruleService.getAllRules();
+    public List<DepreciationRule> all() {
+        return service.getAllRules();
     }
 }
