@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "asset_disposals")
+@Table(name = "asset_disposal_requests")
 public class AssetDisposal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,9 @@ public class AssetDisposal {
 
     @Column(nullable = false)
     private LocalDate disposalDate;
+
+    @Column(nullable = false)
+    private String status = "PENDING";
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id", nullable = false)
@@ -42,4 +45,6 @@ public class AssetDisposal {
     public void setAsset(Asset asset) { this.asset = asset; }
     public User getApprovedBy() { return approvedBy; }
     public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

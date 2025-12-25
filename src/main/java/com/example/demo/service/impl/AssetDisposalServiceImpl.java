@@ -33,6 +33,7 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         newDisposal.setDisposalDate(disposal.getDisposalDate());
         newDisposal.setAsset(asset);
         newDisposal.setApprovedBy(null);
+        newDisposal.setStatus("PENDING");
         
         return disposalRepository.save(newDisposal);
     }
@@ -45,6 +46,7 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
             .orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
         
         disposal.setApprovedBy(admin);
+        disposal.setStatus("APPROVED");
         disposal.getAsset().setStatus("DISPOSED");
         assetRepository.save(disposal.getAsset());
         
