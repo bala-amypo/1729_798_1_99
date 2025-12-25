@@ -1,43 +1,41 @@
 package com.example.demo.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "secret123"; 
-    private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
+    private final String SECRET = "secretkey123456";
 
-    // Generate JWT token
     public String generateToken(String email, Long userId, Set<String> roles) {
         return Jwts.builder()
+                .setClaims(Map.of(
+                        "email", email,
+                        "userId", userId,
+                        "roles", roles
+                ))
                 .setSubject(email)
-                .claim("userId", userId)
-                .claim("roles", roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
     }
 
-    // Validate JWT token
+    public Claims getClaims(String token) {
+        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+    }
+
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            getClaims(token);
             return true;
         } catch (Exception e) {
             return false;
         }
-    }
-
-    // Extract claims from JWT
-    public Claims getClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 }

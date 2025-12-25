@@ -16,59 +16,14 @@ public class Vendor {
     private String contactEmail;
     private String phone;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Vendor() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    public Vendor(Long id, String vendorName, String contactEmail,
-                  String phone, LocalDateTime createdAt) {
-        this.id = id;
-        this.vendorName = vendorName;
-        this.contactEmail = contactEmail;
-        this.phone = phone;
-        this.createdAt = createdAt;
-    }
-
-    // Getters & Setters
-    public Long getId() {
-        return id;
-    }
- 
-    public void setId(Long id) {
-        this.id = id;
-    }
- 
-    public String getVendorName() {
-        return vendorName;
-    }
- 
-    public void setVendorName(String vendorName) {
-        this.vendorName = vendorName;
-    }
- 
-    public String getContactEmail() {
-        return contactEmail;
-    }
- 
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
-    }
- 
-    public String getPhone() {
-        return phone;
-    }
- 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
- 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
- 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getVendorName() { return vendorName; }
+    public void setVendorName(String vendorName) { this.vendorName = vendorName; }
+    public String getContactEmail() { return contactEmail; }
+    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 }

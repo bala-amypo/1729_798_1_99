@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -12,34 +14,29 @@ import java.util.stream.Collectors;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private UserRepository userRepository;
 
-    public AuthController(UserRepository userRepository, JwtUtil jwtUtil) {
-        this.userRepository = userRepository;
-        this.jwtUtil = jwtUtil;
-    }
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public String login(@RequestBody User request) {
+    public String login(@RequestBody User user) {
+        User dbUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid user"));
+        if (!passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
 
-        Set<String> roles = user.getRoles()
+        Set<String> roles = dbUser.getRoles()
                 .stream()
-                .map(role -> role.getName())
+                .map(r -> r.getName())
                 .collect(Collectors.toSet());
 
-        return jwtUtil.generateToken(
-                user.getEmail(),
-                user.getId(),
-                roles
-        );
-    }
-
-    @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        return userRepository.save(user);
+        return jwtUtil.generateToken(dbUser.getEmail(), dbUser.getId(), roles);
     }
 }
