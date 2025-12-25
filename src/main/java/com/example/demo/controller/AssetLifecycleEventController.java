@@ -16,8 +16,7 @@ public class AssetLifecycleEventController {
     }
 
     @PostMapping("/{assetId}")
-    public AssetLifecycleEvent log(@PathVariable Long assetId,
-                                   @RequestBody AssetLifecycleEvent event) {
+    public AssetLifecycleEvent log(@PathVariable Long assetId, @RequestBody AssetLifecycleEvent event) {
         return service.logEvent(assetId, event);
     }
 

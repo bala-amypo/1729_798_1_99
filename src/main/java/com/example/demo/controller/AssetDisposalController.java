@@ -15,14 +15,12 @@ public class AssetDisposalController {
     }
 
     @PostMapping("/request/{assetId}")
-    public AssetDisposal request(@PathVariable Long assetId,
-                                 @RequestBody AssetDisposal disposal) {
+    public AssetDisposal request(@PathVariable Long assetId, @RequestBody AssetDisposal disposal) {
         return service.requestDisposal(assetId, disposal);
     }
 
     @PutMapping("/approve/{disposalId}/{adminId}")
-    public AssetDisposal approve(@PathVariable Long disposalId,
-                                 @PathVariable Long adminId) {
+    public AssetDisposal approve(@PathVariable Long disposalId, @PathVariable Long adminId) {
         return service.approveDisposal(disposalId, adminId);
     }
 }
