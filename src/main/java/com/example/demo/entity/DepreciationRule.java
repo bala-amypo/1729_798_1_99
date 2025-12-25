@@ -11,9 +11,11 @@ public class DepreciationRule {
 
     private String ruleName;
 
-    private int usefulLife;
+    private String method;   // STRAIGHT_LINE, WDV etc.
 
-    private double depreciationRate;
+    private int usefulLifeYears;
+
+    private double salvageValue;
 
     // ---------- GETTERS & SETTERS ----------
 
@@ -33,19 +35,27 @@ public class DepreciationRule {
         this.ruleName = ruleName;
     }
 
-    public int getUsefulLife() {
-        return usefulLife;
+    public String getMethod() {
+        return method;
     }
 
-    public void setUsefulLife(int usefulLife) {
-        this.usefulLife = usefulLife;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
-    public double getDepreciationRate() {
-        return depreciationRate;
+    public int getUsefulLifeYears() {
+        return usefulLifeYears;
     }
 
-    public void setDepreciationRate(double depreciationRate) {
-        this.depreciationRate = depreciationRate;
+    public void setUsefulLifeYears(int usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
+    }
+
+    public double getSalvageValue() {
+        return salvageValue;
+    }
+
+    public void setSalvageValue(double salvageValue) {
+        this.salvageValue = salvageValue;
     }
 }

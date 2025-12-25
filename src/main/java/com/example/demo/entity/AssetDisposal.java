@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class AssetDisposal {
@@ -10,11 +11,17 @@ public class AssetDisposal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String disposalMethod;
+    private String disposalMethod;   // SELL, SCRAP
 
     private double disposalValue;
 
     private LocalDate disposalDate;
+
+    private String status; // REQUESTED, APPROVED, REJECTED
+
+    private LocalDateTime requestedAt;
+
+    private LocalDateTime approvedAt;
 
     @ManyToOne
     private Asset asset;
@@ -54,6 +61,30 @@ public class AssetDisposal {
 
     public void setDisposalDate(LocalDate disposalDate) {
         this.disposalDate = disposalDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getRequestedAt() {
+        return requestedAt;
+    }
+
+    public void setRequestedAt(LocalDateTime requestedAt) {
+        this.requestedAt = requestedAt;
+    }
+
+    public LocalDateTime getApprovedAt() {
+        return approvedAt;
+    }
+
+    public void setApprovedAt(LocalDateTime approvedAt) {
+        this.approvedAt = approvedAt;
     }
 
     public Asset getAsset() {
