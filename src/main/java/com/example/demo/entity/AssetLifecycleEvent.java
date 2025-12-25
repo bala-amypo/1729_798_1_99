@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -21,6 +22,7 @@ public class AssetLifecycleEvent {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "vendor", "depreciationRule"})
     private Asset asset;
 
     public Long getId() { return id; }
