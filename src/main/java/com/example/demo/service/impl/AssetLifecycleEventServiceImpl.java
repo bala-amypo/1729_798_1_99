@@ -1,42 +1,31 @@
 package com.example.demo.service.impl;
+import com.example.demo.exception.ResourceNotFoundException;
 
-import com.example.demo.entity.Asset;
-import com.example.demo.entity.AssetLifecycleEvent;
-import com.example.demo.repository.AssetLifecycleEventRepository;
-import com.example.demo.repository.AssetRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.AssetLifecycleEventService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class AssetLifecycleEventServiceImpl implements AssetLifecycleEventService {
+public class AssetLifecycleEventServiceImpl
+        implements AssetLifecycleEventService {
 
-    @Autowired
-    private AssetLifecycleEventRepository eventRepository;
+    private final AssetRepository assetRepo;
+    private final AssetLifecycleEventRepository eventRepo;
 
-    @Autowired
-    private AssetRepository assetRepository;
-
-    @Override
-    public AssetLifecycleEvent createEvent(Long assetId, AssetLifecycleEvent event) {
-
-        if (event.getEventDate() != null &&
-            event.getEventDate().isAfter(LocalDate.now())) {
-            throw new RuntimeException("Future date not allowed");
-        }
-
-        Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
-
-        event.setAsset(asset);
-        return eventRepository.save(event);
+    public AssetLifecycleEventServiceImpl(AssetRepository assetRepo,
+                                          AssetLifecycleEventRepository eventRepo) {
+        this.assetRepo = assetRepo;
+        this.eventRepo = eventRepo;
     }
 
-    @Override
-    public List<AssetLifecycleEvent> getEventsByAsset(Long assetId) {
-        return eventRepository.findByAssetId(assetId);
+    public AssetLifecycleEvent logEvent(Long assetId, AssetLifecycleEvent event) {
+        event.setAsset(assetRepo.findById(assetId).orElseThrow(() -> new ResourceNotFoundException("Event not found")));
+        return eventRepo.save(event);
+    }
+
+    public List<AssetLifecycleEvent> getEventsForAsset(Long assetId) {
+        return eventRepo.findByAssetId(assetId);
     }
 }
