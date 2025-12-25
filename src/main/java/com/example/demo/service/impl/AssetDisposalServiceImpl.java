@@ -26,8 +26,15 @@ public class AssetDisposalServiceImpl implements AssetDisposalService {
         var asset = assetRepository.findById(assetId)
             .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
         
-        disposal.setAsset(asset);
-        return disposalRepository.save(disposal);
+        // Create new disposal object to avoid any issues with incoming data
+        AssetDisposal newDisposal = new AssetDisposal();
+        newDisposal.setDisposalMethod(disposal.getDisposalMethod());
+        newDisposal.setDisposalValue(disposal.getDisposalValue());
+        newDisposal.setDisposalDate(disposal.getDisposalDate());
+        newDisposal.setAsset(asset);
+        newDisposal.setApprovedBy(null);
+        
+        return disposalRepository.save(newDisposal);
     }
 
     @Override
