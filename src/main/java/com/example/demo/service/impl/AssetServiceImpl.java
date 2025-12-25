@@ -3,57 +3,48 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Asset;
 import com.example.demo.entity.DepreciationRule;
 import com.example.demo.entity.Vendor;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AssetRepository;
 import com.example.demo.repository.DepreciationRuleRepository;
 import com.example.demo.repository.VendorRepository;
 import com.example.demo.service.AssetService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class AssetServiceImpl implements AssetService {
 
-    private final AssetRepository assetRepo;
-    private final VendorRepository vendorRepo;
-    private final DepreciationRuleRepository ruleRepo;
+    @Autowired
+    private AssetRepository assetRepository;
 
-    public AssetServiceImpl(
-            AssetRepository assetRepo,
-            VendorRepository vendorRepo,
-            DepreciationRuleRepository ruleRepo) {
-        this.assetRepo = assetRepo;
-        this.vendorRepo = vendorRepo;
-        this.ruleRepo = ruleRepo;
-    }
+    @Autowired
+    private VendorRepository vendorRepository;
+
+    @Autowired
+    private DepreciationRuleRepository ruleRepository;
 
     @Override
     public Asset createAsset(Long vendorId, Long ruleId, Asset asset) {
 
-        Vendor vendor = vendorRepo.findById(vendorId)
-                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
+        if (asset.getPurchaseCost() == null || asset.getPurchaseCost() <= 0) {
+            throw new RuntimeException("Invalid purchase cost");
+        }
 
-        DepreciationRule rule = ruleRepo.findById(ruleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Depreciation rule not found"));
+        Vendor vendor = vendorRepository.findById(vendorId)
+                .orElseThrow(() -> new RuntimeException("Vendor not found"));
 
-        asset.setId(null);
+        DepreciationRule rule = ruleRepository.findById(ruleId)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+
         asset.setVendor(vendor);
         asset.setDepreciationRule(rule);
-        asset.setCreatedAt(LocalDateTime.now());
 
-        return assetRepo.save(asset);
+        return assetRepository.save(asset);
     }
 
     @Override
     public List<Asset> getAllAssets() {
-        return assetRepo.findAll();
-    }
-
-    @Override
-    public Asset getAssetById(Long assetId) {
-        return assetRepo.findById(assetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+        return assetRepository.findAll();
     }
 }
