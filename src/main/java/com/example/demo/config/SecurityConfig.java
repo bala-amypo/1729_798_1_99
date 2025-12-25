@@ -2,7 +2,6 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,55 +20,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http,
-            JwtFilter jwtFilter,
-            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint
-    ) throws Exception {
-
-        http
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) throws Exception {
+        return http
             .csrf(csrf -> csrf.disable())
-
             .authorizeHttpRequests(auth -> auth
-
-                // PUBLIC
-                .requestMatchers(
-                        "/auth/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/h2-console/**"
-                ).permitAll()
-
-                // ADMIN ONLY
-                .requestMatchers(
-                        "/api/depreciation-rules/**",
-                        "/api/vendors/**",
-                        "/api/asset-disposals/**"
-                ).hasRole("ADMIN")
-
-                // USER + ADMIN
-                .requestMatchers(
-                        "/api/assets/**",
-                        "/api/asset-events/**"
-                ).hasAnyRole("USER", "ADMIN")
-
+                .requestMatchers("/", "/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )
-
-            .exceptionHandling(ex ->
-                ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            )
-
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-
-            .headers(headers ->
-                headers.frameOptions(frame -> frame.disable())
-            )
-
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
     }
 }
